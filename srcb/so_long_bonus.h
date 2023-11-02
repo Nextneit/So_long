@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.h                                          :+:      :+:    :+:   */
+/*   so_long_bonus.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncruz-ga <ncruz-ga@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 13:05:56 by ncruz-ga          #+#    #+#             */
-/*   Updated: 2023/10/25 10:14:59 by ncruz-ga         ###   ########.fr       */
+/*   Updated: 2023/11/02 11:57:42 by ncruz-ga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SO_LONG_H
-# define SO_LONG_H
+#ifndef SO_LONG_BONUS_H
+# define SO_LONG_BONUS_H
 # include "../libft/libft.h"
 # include "../MLX42/include/MLX42/MLX42.h"
 
@@ -37,6 +37,7 @@ typedef struct s_game
 	int				exit;
 	int				exit_copy;
 	int				moves;
+	int				m_moves;
 	t_point			local_exit;
 	t_point			p_position;
 	mlx_t			*mlx;
@@ -58,6 +59,10 @@ typedef struct s_game
 	mlx_image_t		*img_p_right;
 	mlx_texture_t	*text_p_left;
 	mlx_image_t		*img_p_left;
+	mlx_texture_t	*text_mob;
+	mlx_image_t		*img_mob;
+	mlx_texture_t	*text_mob2;
+	mlx_image_t		*img_mob2;
 }					t_game;
 
 int		read_map(t_game *game, char *map_name);
@@ -73,5 +78,3 @@ void	player_move(mlx_key_data_t keydata, void *param);
 void	close_game(void *param);
 
 #endif
-
-//gcc -Wall -Wextra -Werror src/so_long.c src/check_map.c src/read_map.c src/player.c src/valid_way.c src/resize.c src/image.c libft/libft.a MLX42/libmlx42.a -Iinclude -lglfw -L"/Users/$USER/.brew/opt/glfw/lib/"

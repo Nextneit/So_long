@@ -6,7 +6,7 @@
 /*   By: ncruz-ga <ncruz-ga@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 17:15:33 by ncruz-ga          #+#    #+#             */
-/*   Updated: 2023/10/24 12:33:14 by ncruz-ga         ###   ########.fr       */
+/*   Updated: 2023/10/26 16:08:13 by ncruz-ga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,19 @@ void	free_all(t_game *game)
 	int	i;
 
 	i = 0;
-	while (game->map[i] != NULL)
+	while (i <= game->lines)
 	{
 		free(game->map[i]);
 		i++;
 	}
+	free(game->map);
 	i = 0;
-	while (game->map_copy[i] != NULL)
+	while (i <= game->lines)
 	{
 		free(game->map_copy[i]);
 		i++;
 	}
+	free(game->map_copy);
 	free(game);
 }
 
@@ -65,9 +67,10 @@ static int	allocate_map(char *line, t_game *game, int fd, char *map_name)
 	while (line != NULL)
 	{
 		game->lines++;
-		line = get_next_line(fd);
 		free(line);
+		line = get_next_line(fd);
 	}
+	free(line);
 	game->map = ft_calloc(game->lines + 1, sizeof(char *));
 	game->map_copy = ft_calloc(game->lines + 1, sizeof(char *));
 	if (!game->map || !game->map_copy)

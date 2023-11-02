@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.c                                          :+:      :+:    :+:   */
+/*   so_long_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncruz-ga <ncruz-ga@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 16:38:49 by ncruz-ga          #+#    #+#             */
-/*   Updated: 2023/10/25 10:52:07 by ncruz-ga         ###   ########.fr       */
+/*   Updated: 2023/10/30 10:40:57 by ncruz-ga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+/*void ft_leaks(void)
+{
+	system("leaks -q so_long");
+}*/
 
 static void	initialize(t_game *game)
 {
@@ -26,17 +31,17 @@ static void	initialize(t_game *game)
 	game->moves = 0;
 }
 
-static int	init_img(t_game *game)
+static int	init_image(t_game *game)
 {
-	game->text_clo_chest = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/clo_chest.png");
-	game->text_op_chest = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/op_chest.png");
-	game->text_floor = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/floor.png");
-	game->text_wall = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/wall.png");
-	game->text_coin = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/coin.png");
-	game->text_p_up = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/ske_back.png");
-	game->text_p_down = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/ske_front.png");
-	game->text_p_right = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/ske_right.png");
-	game->text_p_left = mlx_load_png("/Users/ncruz-ga/Desktop/so_long/images/ske_left.png");
+	game->text_clo_chest = mlx_load_png("./images/clo_chest.png");
+	game->text_op_chest = mlx_load_png("./images/op_chest.png");
+	game->text_floor = mlx_load_png("./images/floor.png");
+	game->text_wall = mlx_load_png("./images/wall.png");
+	game->text_coin = mlx_load_png("./images/coin.png");
+	game->text_p_up = mlx_load_png("./images/ske_back.png");
+	game->text_p_down = mlx_load_png("./images/ske_front.png");
+	game->text_p_right = mlx_load_png("./images/ske_right.png");
+	game->text_p_left = mlx_load_png("./images/ske_left.png");
 	game->img_clo_chest = mlx_texture_to_image(game->mlx, game->text_clo_chest);
 	game->img_op_chest = mlx_texture_to_image(game->mlx, game->text_op_chest);
 	game->img_floor = mlx_texture_to_image(game->mlx, game->text_floor);
@@ -46,6 +51,7 @@ static int	init_img(t_game *game)
 	game->img_p_down = mlx_texture_to_image(game->mlx, game->text_p_down);
 	game->img_p_right = mlx_texture_to_image(game->mlx, game->text_p_right);
 	game->img_p_left = mlx_texture_to_image(game->mlx, game->text_p_left);
+	init_img2(game);
 	clean_textures(game);
 	if (image_error(game) == 1)
 		return (EXIT_FAILURE);
@@ -57,7 +63,6 @@ void	close_game(void *param)
 	t_game	*game;
 
 	game = param;
-	free_all(game);
 	mlx_close_window(game->mlx);
 }
 
@@ -66,6 +71,7 @@ int	aux_main(t_game *game)
 	if (image_to_window(game) == 1)
 		return (EXIT_FAILURE);
 	mlx_key_hook(game->mlx, &player_move, game);
+	mlx_close_hook(game->mlx, &close_game, game);
 	return (EXIT_SUCCESS);
 }
 
@@ -87,12 +93,12 @@ int	main(int argc, char **argv)
 			"SO_LONG", true);
 	if (!game->mlx)
 		return (free_all(game), EXIT_FAILURE);
-	if (init_img(game) == 1)
+	if (init_image(game) == 1)
 		return (free_all(game), EXIT_FAILURE);
 	if (aux_main(game) == 1)
 		return (free_all(game), EXIT_FAILURE);
 	mlx_resize_hook(game->mlx, &resize_window, NULL);
 	mlx_loop(game->mlx);
 	mlx_terminate(game->mlx);
-	return (EXIT_SUCCESS);
+	return (free_all(game), EXIT_SUCCESS);
 }

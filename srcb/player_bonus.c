@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player.c                                           :+:      :+:    :+:   */
+/*   player_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncruz-ga <ncruz-ga@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 10:02:05 by ncruz-ga          #+#    #+#             */
-/*   Updated: 2023/10/25 11:11:42 by ncruz-ga         ###   ########.fr       */
+/*   Updated: 2023/11/02 12:07:49 by ncruz-ga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,43 +61,51 @@ static void	move_player_c(t_game *game, int x, int y, void *img)
 }
 
 static void	keypress(t_game *game, int x, int y, void *img)
-{	
+{
 	if (game->map[y][x] == 'C')
 	{
 		move_player_c(game, x, y, img);
-		ft_printf("Numero de movimientos: %d\n", game->moves);
+		counter(game);
 	}
 	if (game->map[y][x] == 'E' && game->coin == game->coin_copy)
 		close_game(game);
 	else if (game->map[y][x] == 'E')
 	{
 		move_player_e(game, x, y, img);
-		ft_printf("Numero de movimientos: %d\n", game->moves);
+		counter(game);
 	}
 	else if (game->map[y][x] != '1')
 	{
 		move_player_0(game, x, y, img);
-		ft_printf("Numero de movimientos: %d\n", game->moves);
+		counter(game);
 	}
 }
 
-void	player_move(mlx_key_data_t keydata, void *param)
+void	player_move(mlx_key_data_t data, void *param)
 {
 	t_game	*game;
 
 	game = param;
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+	if (data.key == MLX_KEY_A || data.key == MLX_KEY_S || data.key == MLX_KEY_D
+		|| data.key == MLX_KEY_W && data.action == MLX_PRESS)
+	{
+		if (game->m_moves == 0)
+			mob_sprite(game);
+		else
+			mob_sprite_2(game);
+	}
+	if (data.key == MLX_KEY_ESCAPE && data.action == MLX_PRESS)
 		close_game(game);
-	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
+	if (data.key == MLX_KEY_A && data.action == MLX_PRESS)
 		keypress(game, game->p_position.x - 1, game->p_position.y,
 			game->img_p_left);
-	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
+	if (data.key == MLX_KEY_S && data.action == MLX_PRESS)
 		keypress(game, game->p_position.x, game->p_position.y + 1,
 			game->img_p_down);
-	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
+	if (data.key == MLX_KEY_D && data.action == MLX_PRESS)
 		keypress(game, game->p_position.x + 1, game->p_position.y,
 			game->img_p_right);
-	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
+	if (data.key == MLX_KEY_W && data.action == MLX_PRESS)
 		keypress(game, game->p_position.x, game->p_position.y - 1,
 			game->img_p_up);
 }
